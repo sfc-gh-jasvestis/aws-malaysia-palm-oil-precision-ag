@@ -11,7 +11,6 @@ flowchart LR
     S3[S3 Data Landing] --> SP[Snowpipe]
     IOT[IoT Core] --> KIN[Kinesis]
     KIN --> SPS[Snowpipe Streaming]
-    SP --> RAW[RAW Tables]
     SPS --> RAW
     RAW --> DT[Dynamic Tables]
     DT --> ML[ML Functions]
