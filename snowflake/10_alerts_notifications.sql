@@ -8,7 +8,7 @@ USE SCHEMA APP;
 CREATE OR REPLACE NOTIFICATION INTEGRATION aws_malaysia_palm_oil_precision_ag_EMAIL_INT
   TYPE = EMAIL
   ENABLED = TRUE
-  ALLOWED_RECIPIENTS = ('jonathan.asvestis@snowflake.com');
+  ALLOWED_RECIPIENTS = ('<YOUR_EMAIL>');
 
 -- Alert: YIELD_BELOW_TARGET_ALERT
 CREATE OR REPLACE ALERT APP.YIELD_BELOW_TARGET_ALERT
@@ -22,7 +22,7 @@ IF (EXISTS (
 THEN
   CALL SYSTEM$SEND_EMAIL(
     'aws_malaysia_palm_oil_precision_ag_EMAIL_INT',
-    'jonathan.asvestis@snowflake.com',
+    '<YOUR_EMAIL>',
     '[ALERT] Precision Agriculture & Yield Forecasting: Estate FFB yield below MPOB minimum threshold',
     'Estate FFB yield below MPOB minimum threshold'
   );
@@ -41,7 +41,7 @@ IF (EXISTS (
 THEN
   CALL SYSTEM$SEND_EMAIL(
     'aws_malaysia_palm_oil_precision_ag_EMAIL_INT',
-    'jonathan.asvestis@snowflake.com',
+    '<YOUR_EMAIL>',
     '[ALERT] Precision Agriculture & Yield Forecasting: Soil sensor anomaly detected — possible pest/disease',
     'Soil sensor anomaly detected — possible pest/disease'
   );
