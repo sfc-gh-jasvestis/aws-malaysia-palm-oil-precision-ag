@@ -122,6 +122,7 @@ Industry research and Snowflake customer outcomes:
 - **Malaysian palm oil revenue was RM85B ($18B) in 2024 — smallholders (40% of area) average only 3.2 tonnes/ha** — [MPOB Annual Report](https://bepi.mpob.gov.my/)
 - **Felda (world's largest palm oil plantation operator) deploying drone-based health monitoring across 850,000 hectares** — [Felda Global Ventures](https://www.fgvholdings.com/sustainability/)
 - **Sime Darby achieved 12% yield increase on pilot plots using ML-based fertilizer and harvest optimization** — [Sime Darby Plantation](https://www.simedarbyplantation.com/sustainability/environmental-management)
+- **John Deere** (Snowflake customer): connects 500K+ machines on Snowflake, enabling precision agriculture analytics across 400M+ acres globally -- [snowflake.com/customers/john-deere](https://www.snowflake.com/en/customers/all-customers/case-study/john-deere/)
 
 ## Key Demo Numbers
 
