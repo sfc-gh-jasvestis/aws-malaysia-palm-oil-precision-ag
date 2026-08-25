@@ -118,11 +118,10 @@ Run all scripts including AWS integration. Deploy QuickSight dashboard from `qui
 ## Business Impact
 
 Industry research and Snowflake customer outcomes:
-- **Malaysia produced 16.6M tonnes of crude palm oil in 2023 across 5.67M hectares** — [MPOB](https://bepi.mpob.gov.my/)
-- **Precision agriculture can improve palm oil yields by 15-20% through targeted nutrient management** — [Journal of Oil Palm Research](https://jopr.mpob.gov.my/)
-- **FELDA estates achieving 25+ t/ha FFB yield demonstrate potential of data-driven agronomy** — [FELDA](https://www.felda.gov.my/)
-- **IoT-enabled precision farming reduces fertilizer costs by 20-30% while improving yields** — [McKinsey Agriculture](https://www.mckinsey.com/industries/agriculture/our-insights)
-
+- **Malaysia is world's 2nd largest palm oil producer with 5.7M hectares — MPOB targets 4.5 tonnes/ha national average** — [MPOB Statistics](https://bepi.mpob.gov.my/)
+- **Malaysian palm oil revenue was RM85B ($18B) in 2024 — smallholders (40% of area) average only 3.2 tonnes/ha** — [MPOB Annual Report](https://bepi.mpob.gov.my/index.php/en/statistics/production)
+- **Felda (world's largest palm oil plantation operator) deploying drone-based health monitoring across 850,000 hectares** — [Felda Global Ventures](https://www.feldaglobal.com/sustainability/)
+- **Sime Darby achieved 12% yield increase on pilot plots using ML-based fertilizer and harvest optimization** — [Sime Darby Plantation](https://www.simedarbyplantation.com/sustainability/environmental-management)
 
 ## Key Demo Numbers
 
