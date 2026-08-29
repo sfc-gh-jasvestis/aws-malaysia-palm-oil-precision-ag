@@ -74,7 +74,7 @@ export default function HomePage() {
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Chart data={data?.breakdown || [{ label: 'A', value: 30 }, { label: 'B', value: 70 }]} type="pie" xKey="label" yKeys={[{ key: 'value', name: 'RM/ha' }]} title="Replanting ROI Model" />
-        <ActionMemo persona={{ name: 'Dato' Razak Hamid', role: 'VP Plantations' }} context={{}} onGenerate={async () => ({ subject: 'Action Required', body: 'AI-generated recommendation based on current data.', urgency: 'HIGH', actions: ['Accelerate replanting for >25yr palms', 'Deploy drone fertilizer for peat areas', 'Trial precision harvesting at pilot estates'] })} />
+        <ActionMemo persona={{ name: 'Dato Razak Hamid', role: 'VP Plantations' }} context={{}} onGenerate={async () => ({ subject: 'Action Required', body: 'AI-generated recommendation based on current data.', urgency: 'HIGH', actions: ['Accelerate replanting for >25yr palms', 'Deploy drone fertilizer for peat areas', 'Trial precision harvesting at pilot estates'] })} />
       </div>
     </div>
   );
