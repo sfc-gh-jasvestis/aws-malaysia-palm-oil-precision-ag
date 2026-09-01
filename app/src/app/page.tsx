@@ -32,15 +32,23 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
+
+  // Look up a KPI value returned by /api/data (sourced from CURATED.KPI_SUMMARY).
+  // Falls back to the original literal so the card still renders if the API,
+  // or KPI_SUMMARY, is unavailable.
+  const kpiVal = (title: string, fallback: string): string =>
+    (data?.kpiCards as { title: string; value: string }[] | undefined)
+      ?.find((k) => k.title === title)?.value ?? fallback;
+
   const title = narrative?.title || 'SEA AWS Demo';
 
   const executiveCockpit = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="FFB Yield (Avg)" value="22.8 T/ha" status="neutral" />
-        <KPICard title="OER Rate" value="21.4%" status="neutral" />
-        <KPICard title="Replanting (YTD)" value="4.2K ha" status="neutral" />
-        <KPICard title="Estates" value="412" status="neutral" />
+        <KPICard title="FFB Yield (Avg)" value={kpiVal('FFB Yield (Avg)', '22.8 T/ha')} status="neutral" />
+        <KPICard title="OER Rate" value={kpiVal('OER Rate', '21.4%')} status="neutral" />
+        <KPICard title="Replanting (YTD)" value={kpiVal('Replanting (YTD)', '4.2K ha')} status="neutral" />
+        <KPICard title="Estates" value={kpiVal('Estates', '412')} status="neutral" />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="lg:col-span-1">
@@ -63,9 +71,9 @@ export default function HomePage() {
   const domainTab1 = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <KPICard title="Harvest Interval" value="14 days" />
-        <KPICard title="Palm Age (Avg)" value="12 yrs" />
-        <KPICard title="Fertilizer Cost" value="RM 2.4K/ha" />
+        <KPICard title="Harvest Interval" value={kpiVal('Harvest Interval', '14 days')} />
+        <KPICard title="Palm Age (Avg)" value={kpiVal('Palm Age (Avg)', '12 yrs')} />
+        <KPICard title="Fertilizer Cost" value={kpiVal('Fertilizer Cost', 'RM 2.4K/ha')} />
       </div>
       <Chart data={data?.detail || [{ x: 'Mon', y: 24 }, { x: 'Tue', y: 28 }, { x: 'Wed', y: 22 }, { x: 'Thu', y: 31 }, { x: 'Fri', y: 26 }, { x: 'Sat', y: 19 }, { x: 'Sun', y: 23 }]} type="area" xKey="x" yKeys={[{ key: 'y', name: 'T/ha' }]} title="Yield vs Palm Age" height={400} />
     </div>
