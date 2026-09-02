@@ -1,109 +1,83 @@
-# Demo Script: Precision Agriculture & Yield Forecasting
-## ~4-Minute Recorded Walkthrough
-**Format**: Screen recording with voiceover
-**Target**: Customer meeting / booth loop / social share
-**Narrative**: "Snowflake streams IoT sensor data from 50 estates, forecasts FFB yields with ML, analyzes drone imagery for nutrient deficiency, and alerts agronomists — all native SQL, no external ML platform needed"
-**Demo Mode**: Open app with `?demo=true` for presenter notes
+# Precision Agriculture & Yield Forecasting
 
----
+**Malaysia - Palm Oil & Agriculture**
+Use case: Precision Agriculture
 
-## Two Personas
+> IoT-powered precision farming for Malaysian palm oil estates — soil sensors stream to Snowflake, ML.FORECAST predicts Fresh Fruit Bunch yields, and Cortex Complete analyzes drone imagery for nutrient deficiency.
 
-| Persona | Role | Tool | What they care about |
-|---|---|---|---|
-| **Encik Azman bin Yusof** | Estate Director | React App (SPCS) | FFB yield targets, estate performance, labour costs, replanting schedule |
-| **Kavitha a/p Subramaniam** | Agronomist | Amazon QuickSight | Soil nutrient levels, pest/disease detection, irrigation efficiency, drone imagery analysis |
+## Why Snowflake
 
----
+Snowflake streams IoT sensor data from 50 estates, forecasts FFB yields with ML, analyzes drone imagery for nutrient deficiency, and alerts agronomists — all native SQL, no external ML platform needed
 
-## What's Built
+- **ML.FORECAST on FFB yield timeseries** - Only demo forecasting palm oil Fresh Fruit Bunch yield — not revenue or demand
+- **Cortex Complete (multimodal) for drone imagery** - Only demo analyzing agricultural drone imagery natively in Snowflake
+- **IoT soil sensor streaming to Snowpipe** - Connects physical soil sensors to yield analytics in one platform
+- **Malaysian palm oil precision agriculture context** - MPOB targets, FELDA benchmarks, realistic estate names and hectarage
+- **80 agronomy documents searchable** - Cortex Search on MPOB best practice guides and fertilizer recommendations
+- **AWS IoT Core + SageMaker satellite/NDVI** - Only demo combining IoT sensor ingestion with satellite vegetation analysis
 
-| Layer | Component | Detail |
+## What is deployed
+
+| | |
+|---|---|
+| Database | `MY_PALM_OIL_PRECISION_AG` |
+| Service | `MY_PALM_OIL_PRECISION_AG_APP` |
+| Compute pool | `SEA_DEMOS_MALAYSIA_POOL` |
+| Dimension table | `RAW.FELDA_BENCHMARKS` (20 rows) |
+| Fact table | `RAW.SENSOR_READINGS` (250,000 rows, 90 days) |
+| Curated layer | `CURATED.PERFORMANCE_SUMMARY`, `CURATED.TREND_ANALYSIS`, `CURATED.KPI_SUMMARY` |
+| Currency | MYR (RM) |
+
+Regions in play: Selangor, Johor, Penang, Sabah, Sarawak
+Segments: Immature Palm, Prime Mature, Late Mature, Replanting Due
+
+Dynamic tables are created suspended and refreshed on demand:
+
+```bash
+./refresh_demo_data.sh MY_PALM_OIL_PRECISION_AG
+```
+
+## KPI cards
+
+Every card below is served live from `CURATED.KPI_SUMMARY`. The app keeps the
+original literal as a fallback, so it still renders if Snowflake is unreachable.
+
+| Card | Value | Backed by |
 |---|---|---|
-| **RAW** | 7 tables | ESTATES (50), SENSOR_READINGS (200000), HARVEST_RECORDS (100000), WEATHER_DATA (365), AGRONOMY_DOCS (80), DRONE_IMAGERY (2000), FELDA_BENCHMARKS (20) |
-| **CURATED** | 4 Dynamic Tables | ESTATE_YIELD_SUMMARY, YIELD_TIMESERIES, SOIL_HEALTH_INDEX, PEST_DISEASE_ALERTS |
-| **ML** | ML.FORECAST + ML.ANOMALY_DETECTION | Forecasting + anomaly detection |
-| **AI** | COMPLETE_MULTIMODAL, SUMMARIZE, AI_CLASSIFY | Classification + extraction |
-| **Search** | Cortex Search | 80 documents indexed |
-| **Agent** | PRECISION_AG_AGENT | Semantic View + Search tools |
+| FFB Yield (Avg) | `22.8 T/ha` | average per event |
+| OER Rate | `21.4%` | average per event |
+| Replanting (YTD) | `4.2K ha` | total across Felda Benchmarks |
+| Estates | `412` | total across Felda Benchmarks |
+| Harvest Interval | `14 days` | average per event |
+| Palm Age (Avg) | `12 yrs` | average per event |
+| Fertilizer Cost | `RM 2.4K/ha` | average per event |
 
 
----
+## Demo flow
 
-## The Story
+1. Executive Cockpit
+2. Yield Analytics
+3. Soil & Sensor Data
+4. Ask AI
+5. Architecture & Data
 
-A Malaysian palm oil group manages 50 estates across 120,000 hectares in Johor, Pahang, and Sabah. Average FFB yield is 22.4 tonnes per hectare — well below the MPOB target of 25 tonnes. Three estates have dropped below the critical 20-tonne threshold. IoT soil sensors reveal nutrient deficiencies, drone imagery confirms the diagnosis, and ML forecasts predict continued decline without intervention.
+## Talking points
 
----
+- **50 estates, 120,000 ha** - total managed area across Johor, Pahang, and Sabah
+- **22.4 t FFB/ha** - current average yield (target: 25 t/ha)
+- **3 estates** - below critical 20 t/ha threshold
+- **RM 1.2B** - annual harvest value
+- **200K sensor readings** - IoT soil data streamed to Snowflake
+- **2,000 drone images** - analyzed by Cortex Complete (multimodal)
+- **5 of 8 weeks** - anomalous for Estate Kluang (ML.ANOMALY_DETECTION)
 
-## Script
+## Business impact
 
-### [0:00–0:45] EXECUTIVE COCKPIT
-
-**Show**: Executive Cockpit tab
-
-> "Fifty estates across 120,000 hectares — averaging 22.4 tonnes FFB per hectare against a 25-tonne target."
-
-**Action**: Point at the 22.4 t/ha yield KPI vs 25 target
-
-### [0:45–1:30] YIELD ANALYTICS
-
-**Show**: Yield Analytics tab
-
-> "Estate Kluang at 18.7 tonnes/ha — 6.3 tonnes below MPOB target for mature palms."
-
-**Action**: Click Estate Kluang in the list
-
-### [1:30–2:15] SOIL & SENSOR DATA
-
-**Show**: Soil & Sensor Data tab
-
-> "Two hundred thousand sensor readings across 50 estates. Kluang showing severe boron deficiency."
-
-**Action**: Show soil sensor dashboard for Kluang
-
-### [2:15–3:00] ASK AI
-
-**Show**: Ask AI tab
-
-> "Encik Azman asks: 'What's the forecasted FFB production for next quarter across all estates?'"
-
-**Action**: Type: 'What is the forecasted FFB yield for Q1?'
-
-### [3:00–3:45] ARCHITECTURE & DATA
-
-**Show**: Architecture & Data tab
-
-> "Seven Snowflake capabilities, six AWS services."
-
-**Action**: Walk through architecture diagram
-
+- Malaysia produced 16.6M tonnes of crude palm oil in 2023 across 5.67M hectares (MPOB)
+- Precision agriculture can improve palm oil yields by 15-20% through targeted nutrient management (Journal of Oil Palm Research)
+- FELDA estates achieving 25+ t/ha FFB yield demonstrate potential of data-driven agronomy (FELDA)
+- IoT-enabled precision farming reduces fertilizer costs by 20-30% while improving yields (McKinsey Agriculture)
 
 ---
-
-## Key Demo Differentiators
-
-1. **ML.FORECAST on FFB yield timeseries** — Only demo forecasting palm oil Fresh Fruit Bunch yield — not revenue or demand
-2. **Cortex Complete (multimodal) for drone imagery** — Only demo analyzing agricultural drone imagery natively in Snowflake
-3. **IoT soil sensor streaming to Snowpipe** — Connects physical soil sensors to yield analytics in one platform
-4. **Malaysian palm oil precision agriculture context** — MPOB targets, FELDA benchmarks, realistic estate names and hectarage
-5. **80 agronomy documents searchable** — Cortex Search on MPOB best practice guides and fertilizer recommendations
-6. **AWS IoT Core + SageMaker satellite/NDVI** — Only demo combining IoT sensor ingestion with satellite vegetation analysis
-
-
----
-
-## Demo Prep Checklist
-
-### Data Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_PRECISION_AG.RAW.ESTATES` → 50
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_PRECISION_AG.RAW.SENSOR_READINGS` → 200000
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_PRECISION_AG.RAW.HARVEST_RECORDS` → 100000
-
-### ML Model Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_PRECISION_AG.ML.FFB_YIELD_FORECAST_RESULTS` → >0
-- [ ] `SELECT SUM(CASE WHEN IS_ANOMALY THEN 1 ELSE 0 END) FROM PALM_OIL_PRECISION_AG.ML.PEST_DISEASE_ANOMALY_RESULTS WHERE SERIES = 'KLUANG'` → >=5
-
-### AI/Agent Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_PRECISION_AG.AI.DRONE_IMAGERY_ANALYSIS` → >=2000
-
+Generated from `generator/demo_specs/aws-malaysia-palm-oil-precision-ag.json`. Do not hand-edit: run
+`python3 generator/gen_repo_docs.py aws-malaysia-palm-oil-precision-ag` instead.
