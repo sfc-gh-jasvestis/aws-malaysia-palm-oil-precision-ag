@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "repo": "aws-malaysia-palm-oil-precision-ag",
+  "operation": "on-demand",
+  "data_classification": "synthetic demonstration only",
+  "currency": "USD",
+  "grains": {
+    "RAW.BLOCKS": "one row per oil palm block",
+    "RAW.BLOCK_DAILY": "one row per block per day (90 days)",
+    "RAW.SENSOR_COVERAGE": "one row per block (sensor mapping coverage snapshot)",
+    "CURATED.PERFORMANCE_SUMMARY": "one row per block",
+    "CURATED.TREND_ANALYSIS": "one row per day",
+    "CURATED.CROP_LOSS_CAUSES": "one row per root cause",
+    "CURATED.KPI_SUMMARY": "one row per KPI",
+    "ML.CROP_LOSS_RISK_SCORES": "one row per block (latest day)"
+  },
+  "metrics": {
+    "Ripe Bunch Rate": "100 * SUM(RIPE_BUNCHES) / SUM(BUNCHES_GRADED)",
+    "Crop-Loss Events": "SUM(CROP_LOSS_COUNT)",
+    "Fertilizer Intensity": "SUM(FERTILIZER_KG) / SUM(FFB_TONNES) (kg per tonne FFB)",
+    "FFB Harvested (t)": "SUM(FFB_TONNES)",
+    "Sensor Network Uptime": "100 * SUM(OPERATING_HOURS) / SUM(PLANNED_HOURS)",
+    "Blocks Monitored": "COUNT(RAW.BLOCKS)",
+    "Sensor Mapping Coverage": "100 * SUM(LEAST(MAPPED_HA, BLOCK_HA)) / SUM(BLOCK_HA)",
+    "Pest Alerts": "SUM(PEST_ALERTS)"
+  },
+  "chart_bindings": {
+    "daily_ripe_bunch_rate": [
+      "CURATED.TREND_ANALYSIS.METRIC_DATE",
+      "RIPE_PCT"
+    ],
+    "unripe_bunches_by_cause": [
+      "CURATED.CROP_LOSS_CAUSES.ROOT_CAUSE",
+      "UNRIPE_BUNCHES"
+    ],
+    "scouting_vs_ripe_bunch_rate": [
+      "CURATED.PERFORMANCE_SUMMARY.SCOUTING_COMPLETION_PCT",
+      "RIPE_PCT"
+    ],
+    "quicksight_crop_loss_risk": [
+      "ENTITY_ID",
+      "MAX(CROP_LOSS_PROB_7D)"
+    ]
+  },
+  "freshness": "MAX(EVENT_DATE) is an observation watermark; requestedAt is not freshness",
+  "required_capabilities": {
+    "core_pipeline": "Curated KPIs reconcile to a RAW recomputation (run_core.py checks this on every build)",
+    "crop_loss_risk_model": "Snowflake ML CLASSIFICATION of P(crop-loss event in next 7 days) per block, evaluated on an out-of-time holdout",
+    "forecast_and_anomaly": "14-day grower-wide FFB harvest FORECAST; soil moisture deficit ANOMALY_DETECTION (train 75 days, detect last 15)",
+    "search": "Cortex Search SEARCH.AGRONOMY_SOP_SEARCH over synthetic crop-loss response SOPs (one per block category and cause)",
+    "semantic_analytics": "Semantic view APP.AGRONOMY_ANALYTICS and Cortex Agent APP.AGRONOMY_AGENT using analyst + search tools",
+    "grounded_ai": "Agent answers return generated SQL and SOP citations; the action memo uses only KPI, crop-loss, cause and risk rows",
+    "quicksight": "DIRECT_QUERY dashboard (blocks with observations, daily ripe bunch rate, crop-loss events by block, crop-loss risk, IoT message count) through a read-only Snowflake service user",
+    "quicksight_q": "Amazon Q topic over the curated datasets for natural-language questions",
+    "aws_ingestion": "IoT Core rule -> S3 -> Snowpipe AUTO_INGEST into RAW.LIVE_TELEMETRY",
+    "notifications": "APP.LIVE_ALARM_ALERT logs new ALARM readings to APP.ALERT_LOG and emails via SYSTEM$SEND_EMAIL; alert and tasks suspended between demos",
+    "orchestration": "Task graph APP.TASK_REFRESH_CURATED -> APP.TASK_RESCORE_RISK run on demand (EXECUTE TASK)",
+    "app_deployment": "SPCS service APP.MY_PALM_OIL_PRECISION_AG_APP; routes /api/data, /api/ask, /api/agent"
+  },
+  "builds": {
+    "snowflake": {
+      "database": "MALAYSIA_PALM_OIL_PRECISION_AG_SNOWFLAKE",
+      "app_setting": "DEMO_PLATFORM=snowflake",
+      "live_telemetry": "APP.SIMULATE_TELEMETRY(n)",
+      "memo": "Cortex AI_COMPLETE (claude-sonnet-4-5)"
+    },
+    "aws": {
+      "database": "MALAYSIA_PALM_OIL_PRECISION_AG_AWS",
+      "app_setting": "DEMO_PLATFORM=aws",
+      "live_telemetry": "AWS IoT Core -> S3 -> Snowpipe",
+      "memo": "Amazon Bedrock Claude Sonnet 4.5 via APP.BEDROCK_GENERATE",
+      "capabilities": "see required_capabilities"
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "title": "Malaysia Oil Palm Precision Agriculture",
+  "duration": "6 minutes",
+  "thesis": "A fictional Malaysian oil palm grower runs block agronomy on Snowflake: curated dynamic tables turn daily block observations into ripeness, crop-loss, fertilizer and sensor KPIs, Snowflake ML ranks next-week crop-loss risk, and Cortex answers questions with SQL and SOP citations.",
+  "tabs": [
+    {
+      "id": "executive-cockpit",
+      "persona": { "name": "Nurul Aisyah Rahman", "role": "VP Plantation Operations (fictional)", "avatar": "" },
+      "talking_points": [
+        "Thirty synthetic blocks on estates near Kluang, Kuantan, Sandakan and Bintulu, with one set of KPIs: ripe bunch rate, crop-loss events, fertilizer intensity and tonnes of FFB harvested.",
+        "Each KPI is computed as an explicit numerator and denominator in a dynamic table, so any figure drills back to block-day rows. The thresholds are demo settings, not agronomic guidance.",
+        "The cause chart ranks crop-loss causes by the unripe bunches they leave behind."
+      ],
+      "show": ["KPI cards", "Daily ripe bunch rate", "Unripe bunches by cause", "Block table"],
+      "call_out": "Plantation KPIs the whole group can trace to source",
+      "transition": { "next_tab": "predictive", "line": "Where is the next crop-loss event most likely?" }
+    },
+    {
+      "id": "predictive",
+      "persona": { "name": "Daniel Lim Wei Jie", "role": "Estate Agronomist (fictional)", "avatar": "" },
+      "talking_points": [
+        "A Snowflake ML classification model estimates, per block, the chance of a crop-loss event within 7 days.",
+        "Its holdout line reports precision and recall on the latest labelled days next to the base rate, so the audience sees how good it really is.",
+        "Anomaly detection picks out unusual soil moisture deficit days, and a forecast projects the grower's daily FFB harvest 14 days ahead."
+      ],
+      "show": ["Holdout metrics", "Risk by block", "FFB harvest forecast", "Soil moisture anomalies"],
+      "call_out": "Measured ML that runs where the data lives",
+      "transition": { "next_tab": "planning", "line": "Can we trust the field data behind these scores?" }
+    },
+    {
+      "id": "planning",
+      "persona": { "name": "Daniel Lim Wei Jie", "role": "Estate Agronomist (fictional)", "avatar": "" },
+      "talking_points": [
+        "Sensor uptime and mapped hectares show how much of each estate is actually observed.",
+        "Plotting scouting completion against ripe bunch rate per block shows where the two move together; treat it as a correlation, not a cause.",
+        "The action memo proposes three prioritised actions, drawn only from the KPI, crop-loss, cause and risk tables."
+      ],
+      "show": ["Sensor uptime and mapping coverage", "Scouting completion vs ripe bunch rate", "Action memo"],
+      "call_out": "Draft actions grounded in data, approved by people",
+      "transition": { "next_tab": "live", "line": "What if a field sensor alarms during the meeting?" }
+    },
+    {
+      "id": "live",
+      "persona": { "name": "Daniel Lim Wei Jie", "role": "Estate Agronomist (fictional)", "avatar": "" },
+      "talking_points": [
+        "Soil moisture deficit and drain water level readings arrive in RAW.LIVE_TELEMETRY, either from the built-in simulator or from AWS IoT Core via S3 and Snowpipe.",
+        "A Snowflake alert records each ALARM reading with an SOP hint and the block's risk band, and emails the agronomist on duty."
+      ],
+      "show": ["Messages loaded and lag", "Latest readings", "Alert log"],
+      "call_out": "Sensor alarm to agronomist email on one platform",
+      "transition": { "next_tab": "ask-ai", "line": "Let's ask the data in plain language." }
+    },
+    {
+      "id": "ask-ai",
+      "persona": { "name": "Nurul Aisyah Rahman", "role": "VP Plantation Operations (fictional)", "avatar": "" },
+      "talking_points": [
+        "The Cortex Agent combines Cortex Analyst on the semantic view for numbers with Cortex Search on synthetic crop-loss SOPs for procedures.",
+        "Every answer displays the SQL it ran and the SOP IDs it cited."
+      ],
+      "show": ["Ask a sample question", "Generated SQL", "SOP citations"],
+      "call_out": "Answers you can check line by line",
+      "transition": { "next_tab": "architecture", "line": "And this is the build behind it." }
+    },
+    {
+      "id": "architecture",
+      "persona": { "name": "Nurul Aisyah Rahman", "role": "VP Plantation Operations (fictional)", "avatar": "" },
+      "talking_points": [
+        "One shared core supports two builds: Snowflake only, or AWS + Snowflake with IoT Core, Bedrock, QuickSight and Amazon Q.",
+        "All data is synthetic and regenerated identically from the repository."
+      ],
+      "show": ["Both architecture diagrams"],
+      "call_out": "A governed Snowflake core with an optional AWS edge",
+      "transition": { "next_tab": "", "line": "Questions?" }
+    }
+  ]
+}
